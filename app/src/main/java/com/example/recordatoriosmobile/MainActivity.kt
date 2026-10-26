@@ -22,27 +22,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-// Alternativas posibles para la categoría.
 sealed class Categoria {
     object Estudio : Categoria()
     object Personal : Categoria()
     object Finanzas : Categoria()
 }
 
-// Alternativas posibles para la prioridad.
-sealed class Prioridad(val texto: String) {
+    sealed class Prioridad(val texto: String) {
     object Alta : Prioridad("Alta")
     object Media : Prioridad("Media")
     object Baja : Prioridad("Baja")
 }
-
-// Alternativas posibles para el estado de cada recordatorio.
 sealed class EstadoRecordatorio(val texto: String) {
     object Pendiente : EstadoRecordatorio("Pendiente")
     object Completado : EstadoRecordatorio("Completado")
 }
 
-// Modelo inmutable. La nota es opcional: puede ser null.
 data class Recordatorio(
     val id: Int,
     val titulo: String,
@@ -52,14 +47,12 @@ data class Recordatorio(
     val nota: String? = null
 )
 
-// Estados posibles de la pantalla.
 sealed class EstadoPantalla {
     data class ConDatos(val recordatorios: List<Recordatorio>) : EstadoPantalla()
     object Vacia : EstadoPantalla()
     data class Error(val mensaje: String) : EstadoPantalla()
 }
 
-// Datos de ejemplo: no se necesita base de datos en la API 1.
 fun recordatoriosSimulados(): List<Recordatorio> = listOf(
     Recordatorio(1, "Estudiar Kotlin", Categoria.Estudio, Prioridad.Alta, EstadoRecordatorio.Pendiente),
     Recordatorio(2, "Entregar la API 1", Categoria.Estudio, Prioridad.Alta, EstadoRecordatorio.Pendiente, "Antes del 28/10"),
@@ -68,11 +61,9 @@ fun recordatoriosSimulados(): List<Recordatorio> = listOf(
     Recordatorio(5, "Ordenar apuntes", Categoria.Estudio, Prioridad.Baja, EstadoRecordatorio.Completado)
 )
 
-// Validación básica para evitar datos inválidos.
 fun esValido(recordatorio: Recordatorio): Boolean =
     recordatorio.id > 0 && recordatorio.titulo.isNotBlank()
 
-// Filtros solicitados por la consigna.
 fun filtrarPorEstado(
     lista: List<Recordatorio>, estado: EstadoRecordatorio
 ): List<Recordatorio> = lista.filter { it.estado == estado }
@@ -98,10 +89,8 @@ class MainActivity : ComponentActivity() {
 fun PantallaRecordatorios() {
     val recordatorios = recordatoriosSimulados()
 
-    // Set: las categorías repetidas se cuentan una sola vez.
     val categoriasUnicas: Set<Categoria> = recordatorios.map { it.categoria }.toSet()
 
-    // Map: cada categoría se relaciona con una etiqueta.
     val etiquetasPorCategoria: Map<Categoria, String> = mapOf(
         Categoria.Estudio to "Estudio",
         Categoria.Personal to "Personal",
